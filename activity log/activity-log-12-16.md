@@ -1,0 +1,2 @@
+-added post comment functionality
+-added view videos by user in profile

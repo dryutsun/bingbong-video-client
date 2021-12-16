@@ -2,45 +2,53 @@ import React, { useEffect, useState } from 'react'
 
 
 export default function Comment(props) {
-    const [newComment, setNewComment] = useState({
-        postedBy: props.username,
-        commentText: "",
-        thumbnail: "",
-        })
+  const [newComment, setNewComment] = useState({   
+          "postedBy":props.userId,
+          // "username":props.userId.email,  
+          "commentText": "",
+          "thumbnail": ""
+      })
 
-
-
-//function to bring all comments belonging to a video
-//function to post a comment 
-const postComment = (e) => {
-    e.preventDefault()
-    let preJSONBody = {
-        postedBy: newComment.postedBy,
-        commentText: newComment.commentText,
-        thumbnail: newComment.thumbnail
+  const handleCommentInputChange = (e) => {
+    setNewComment({ ...newComment, [e.target.name]: e.target.value })
+    // this is to see change and update current input value and assign it to NewVideo
     }
-    fetch(`http://localhost:8000/comments/${props.videoId}`, {
+
+    console.log('comment props', props)
+
+  //function to post a comment 
+  const postComment = (e) => {
+      e.preventDefault()
+      console.log ('this is video id', props.videoId)
+      // console.log('this is userid', props)
+      console.log('this is commenttext', newComment)
+      
+      let preJSONBody = {
+          postedBy: props.userId,
+          username: props.userId.email,  
+          commentText: newComment.commentText,
+          thumbnail: newComment.thumbnail,
+      }
+      fetch(`http://localhost:8000/comments/${props.videoId}`, {
       method: "POST",
-      body: JSON.stringify(preJSONBody),
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${props.user.token}`,
-      }
-        .then((response) => response.json())
-        .then((postedComment) => {
-          setNewComment({
-            postedBy: props.username,
-            commentText: "",
-            thumbnail: "",
-          })
-        })
-        .catch((err) => console.error()),
+        "Authorization": `Bearer ${props.userId.token}`
+                },
+        body: JSON.stringify(preJSONBody)
+      
     })
-
-const handleInputChange = (e) => {
-  setNewComment({ ...newComment, [e.target.name]: e.target.value })
-  // this is to see change and update current input value and assign it to NewVideo
-}
+          .then(response => response.json())
+          .then(postedComment => {
+            setNewComment({
+                postedBy: props.userId,
+                // username: props.userId.email,
+                commentText: "",
+                thumbnail: "",
+              })
+            })
+            .catch(err=>console.error)
+    }
     // let user import comments from schema (findBy: video id) using a populate method
     // *** must alter the comment route/model***
 
@@ -48,18 +56,19 @@ const handleInputChange = (e) => {
 
     return (
       <form onSubmit={postComment}>
-        <div>
+          <div>
           <label htmlFor="comment">Type a comment:</label>
           <input
-            type="text"
-            name="comment"
-            id="comment"
-            onChange={handleInputChange}
-            value={newComment.commentText}
+              type="text"
+              name="commentText"
+              id="comment"
+              onChange={handleCommentInputChange}
+              value={newComment.commentText}
           />
-        </div>
-        <input type="submit" value="Submit"/>
+          
+          </div>
+          <input type="submit" value="Submit"/>
       </form>
     )    
 }
-}
+

@@ -3,6 +3,7 @@ import Video2 from '../modules/Video2'
 import Card from 'react-bootstrap/Card'
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
+import Comment from '../modules/Comment'
 
 const Home = (props) => {
 	// const { msgAlert, user } = props
@@ -31,10 +32,16 @@ const Home = (props) => {
 	let allFoundVideos
 	if (props.allVideos !== null) {
 		allFoundVideos = props.allVideos.map((video, key)=> {
-			console.log("this is video id", video._id)
-			console.log('this is user', props.curProfile)
-			return (<Video2 index={key} url={video.url} comments={video.comments} title={video.title}
-				curProfile={props.curProfile} videoId={video._id} user={props.user} />)
+			// console.log("this is video id", video._id)
+			// console.log('this is user', props.curProfile)
+			return (
+				<div>
+					<Video2 index={key} url={video.url} comments={video.comments} title={video.title}
+					curProfile={props.curProfile} videoId={video._id} user={props.user} />
+
+					<Comment curProfile={props.curProfile} videoId={video._id} userId={props.user}/>
+				</div>
+				)
 	})}
 
 

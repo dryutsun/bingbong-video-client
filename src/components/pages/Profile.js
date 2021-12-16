@@ -1,5 +1,6 @@
 import React from 'react'
 import { useState, useEffect} from 'react'
+import App from '../../App'
 export default function Profile(props) {
 // `use strict`;
      //states
@@ -9,8 +10,6 @@ export default function Profile(props) {
         username: '',
         owner: props.user._id
     })
-
-
 
     useEffect(()=>{
         props.getAllProfile()
@@ -23,6 +22,22 @@ export default function Profile(props) {
         setCreateProfile({...createProfile, [e.target.name]: e.target.value})
     }
 
+    const deleteVideo = (e) => {
+        e.preventDefault()
+        fetch(`http://localhost:8000/videos/${e.target.id}`, {
+            method: "DELETE",
+                headers: {
+                           "Content-Type": "application/json",
+                           "Authorization": `Bearer ${props.user.token}`
+                         },
+            })
+            .then(() => props.getAllVideos()) 
+            .catch(error => console.error())
+        // console.log("delete Video target", e.target.value
+        }
+
+
+    console.log('profile all videos', props.allVideos)
     const handleSubmit = (e) => {
         e.preventDefault() 
         // let jsonPayload = {
@@ -57,6 +72,26 @@ export default function Profile(props) {
         })
     }
 
+    let userVideos = props.allVideos.filter((uVideo)=>{
+        return props.user._id === uVideo.owner })
+        console.log( 'user videos', userVideos)
+
+
+    let userMap = userVideos.map((video)=>{
+        return <div>
+                {video.title}
+                <form 
+                id= {video._id}
+                onSubmit= {deleteVideo}>
+                    <button
+                        type= "submit"
+                        value= "Submit"
+                        >
+                        Delete
+                    </button>
+                </form>
+               </div>
+    }) 
     let renderform
 
     if (props.curProfile.length === 0) {
@@ -90,6 +125,7 @@ export default function Profile(props) {
                 <div>
                     Current UserName: 
                     <h1>{props.curProfile[0].username}</h1>
+                    {userMap}
                 </div>
             )
         } else {

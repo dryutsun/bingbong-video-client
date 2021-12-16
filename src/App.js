@@ -55,6 +55,8 @@ useEffect(() => {
   getAllProfile()
 }, [user])
 
+console.log('this is user', user)
+
 const getAllVideos = () => {
       fetch(`http://localhost:8000/videos/`)
       .then(response => {
@@ -119,7 +121,15 @@ const getAllProfile = () => {
       <Fragment>
         <Header user={user} />
         <Routes>
-          <Route path="/" element={<Home msgAlert={msgAlert} user={user} curProfile={curProfile} allVideos={allVideos}/>} />
+          <Route
+            path="/"
+            element={
+            <Home msgAlert={msgAlert}
+                  user={user} 
+                  curProfile={curProfile} 
+                  allVideos={allVideos}/>}
+                  refreshVideos={getAllVideos}
+                />
           <Route
             path="/sign-up"
             element={<SignUp msgAlert={msgAlert} setUser={setUser} />}
@@ -145,6 +155,8 @@ const getAllProfile = () => {
             element={
               <RequireAuth user={user}>
                 <Profile
+                  getAllVideos={getAllVideos}
+                  allVideos={allVideos}
                   getAllProfile={getAllProfile}
                   curProfile={curProfile}
                   user={user}
@@ -156,7 +168,8 @@ const getAllProfile = () => {
             path="post-new-video"
             element={
               <RequireAuth user={user}>
-                <AddVideo 
+                <AddVideo
+                  refreshVideos={getAllVideos}
                   getAllProfile={getAllProfile}
                   curProfile={curProfile}
                   user={user}
