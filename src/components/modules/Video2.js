@@ -9,42 +9,51 @@ import { ListGroup, ListGroupItem } from 'react-bootstrap'
 import Comment from './Comment'
 
 export default function Video2 (props) {
+  let userId=props.userId
+  console.log(userId)
+
     const [newComment, setNewComment] = useState({
-      postedBy: props.username,
+      postedBy: userId,
       commentText: "",
       thumbnail: "",
     })
 
+    const handleCommentInputChange = (e) => {
+      setNewComment({ ...newComment, [e.target.name]: e.target.value })
+      // this is to see change and update current input value and assign it to NewVideo
+      }
+
     //function to post a comment 
     const postComment = (e) => {
         e.preventDefault()
+        console.log ('this is video id', props.videoId)
+        console.log('this is userid', props.user)
+        console.log('this is commenttext', newComment)
         let preJSONBody = {
-            postedBy: newComment.postedBy,
+            postedBy: userId,
             commentText: newComment.commentText,
-            thumbnail: newComment.thumbnail
+            thumbnail: newComment.thumbnail,
         }
         fetch(`http://localhost:8000/comments/${props.videoId}`, {
         method: "POST",
-        body: JSON.stringify(preJSONBody),
         headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${props.user.token}`,
-        }
-            .then((response) => response.json())
-            .then((postedComment) => {
-            setNewComment({
-                postedBy: props.username,
-                commentText: "",
-                thumbnail: "",
-            })
-            })
-            .catch((err) => console.error()),
-        })
-    }
-        const handleCommentInputChange = (e) => {
-    setNewComment({ ...newComment, [e.target.name]: e.target.value })
-    // this is to see change and update current input value and assign it to NewVideo
-    }
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${props.user.token}`
+      },
+        body: JSON.stringify(preJSONBody)
+        
+      })
+            .then(response => response.json())
+            .then(postedComment => {
+              setNewComment({
+                  postedBy: userId,
+                  commentText: "",
+                  thumbnail: "",
+              })
+              })
+              .catch(err=>console.error)
+      }
+        
     // console.log("these are the props in video2", props)
 
     // regex filter to allow us to determine what to display depending on true or false result!
@@ -59,7 +68,7 @@ export default function Video2 (props) {
         //   console.log(comment)
           return (
               <ListGroupItem>
-                  <small>{comment.postedBy}</small>
+                  <small>{comment.username}</small>
                   <p>{comment.commentText}</p>
               </ListGroupItem>
           )
@@ -69,8 +78,7 @@ export default function Video2 (props) {
     }
 
     //   console.log("is valid url", isValidUrl(props.url))
-      // This works...don't touch :*(
-      console.log("these are the props", props);
+      // This works...don't touch :*(;
     const {url} = props
       return (
         isValidUrl(url)  ? 
@@ -93,11 +101,12 @@ export default function Video2 (props) {
                         <label htmlFor="comment">Type a comment:</label>
                         <input
                             type="text"
-                            name="comment"
+                            name="commentText"
                             id="comment"
                             onChange={handleCommentInputChange}
                             value={newComment.commentText}
                         />
+                        
                         </div>
                         <input type="submit" value="Submit"/>
                     </form>

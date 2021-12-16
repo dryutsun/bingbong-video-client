@@ -25,7 +25,7 @@ const App = () => {
   const [user, setUser] = useState(null)
   const [msgAlerts, setMsgAlerts] = useState([])
   const [curProfile, setCurProfile] = useState([])
-
+  const [allVideos, setAllVideos] = useState(null)
 
 
 // build the forms
@@ -50,6 +50,24 @@ const App = () => {
 
 // WE STRINGIFY BODY OBJECTS WHEN SENDING POST REQUESTS
 // WHEN RETRIEVING RESPOSNES, WE PARSE IT INTO JSON...
+useEffect(() => {
+  getAllVideos()
+  getAllProfile()
+}, [user])
+
+const getAllVideos = () => {
+      fetch(`http://localhost:8000/videos/`)
+      .then(response => {
+          return response.json()
+      })
+      .then(foundVideos => {
+          console.log("anything?", foundVideos.videos)
+          setAllVideos(foundVideos.videos)
+    // console.log("this is allVideos", allVideos)
+  })
+  .catch((error) => { 
+    console.log(error) })
+  }
 
 const getAllProfile = () => {
   if (user !== null) {
@@ -101,7 +119,7 @@ const getAllProfile = () => {
       <Fragment>
         <Header user={user} />
         <Routes>
-          <Route path="/" element={<Home msgAlert={msgAlert} user={user} />} />
+          <Route path="/" element={<Home msgAlert={msgAlert} user={user} curProfile={curProfile} allVideos={allVideos}/>} />
           <Route
             path="/sign-up"
             element={<SignUp msgAlert={msgAlert} setUser={setUser} />}

@@ -7,38 +7,40 @@ import Col from 'react-bootstrap/Col'
 const Home = (props) => {
 	// const { msgAlert, user } = props
 	console.log('props in home', props)
-	// retrieving all videos
-	const [allVideos, setAllVideos] = useState(null)
+	// retrieving all videosF
+	// const [allVideos, setAllVideos] = useState(null)
 
-	useEffect(() => {
-		getAllVideos()
-	}, [])
+	// useEffect(() => {
+	// 	getAllVideos()
+	// }, [])
 
-	const getAllVideos = () => {
-        fetch(`http://localhost:8000/videos/`)
-        .then(response => {
-            return response.json()
-        })
-        .then(foundVideos => {
-            console.log("anything?", foundVideos.videos)
-            setAllVideos(foundVideos.videos)
-			// console.log("this is allVideos", allVideos)
-		})
-		.catch((error) => { 
-			console.log(error) })
-    }
+	// const getAllVideos = () => {
+    //     fetch(`http://localhost:8000/videos/`)
+    //     .then(response => {
+    //         return response.json()
+    //     })
+    //     .then(foundVideos => {
+    //         console.log("anything?", foundVideos.videos)
+    //         setAllVideos(foundVideos.videos)
+	// 		// console.log("this is allVideos", allVideos)
+	// 	})
+	// 	.catch((error) => { 
+	// 		console.log(error) })
+    // }
 
 	let allFoundVideos
-	if (allVideos !== null) {
-		allFoundVideos = allVideos.map((video, key)=> {
+	if (props.allVideos !== null) {
+		allFoundVideos = props.allVideos.map((video, key)=> {
 			console.log("this is video id", video._id)
-			return (<Video2 index={key} url={video.url} comments={video.comments} title={video.title} curProfile={props.curProfile} videoId={video._id}  />)
+			console.log('this is user', props.curProfile)
+			return (<Video2 index={key} url={video.url} comments={video.comments} title={video.title}
+				curProfile={props.curProfile} videoId={video._id} user={props.user} />)
 	})}
 
 
 	return (
 		<div>
-			{allVideos === null ? 
+			{props.allVideos === null ? 
 				null :
 				<Row xs={1} md={1} className="g-4">
 					{allFoundVideos}
