@@ -4,6 +4,7 @@ import Card from 'react-bootstrap/Card'
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 import Comment from '../modules/Comment'
+import Container from 'react-bootstrap/Container'
 
 const Home = (props) => {
 	// const { msgAlert, user } = props
@@ -35,12 +36,15 @@ const Home = (props) => {
 			// console.log("this is video id", video._id)
 			// console.log('this is user', props.curProfile)
 			return (
-				<div>
+				<Container>
 					<Video2 index={key} url={video.url} comments={video.comments} title={video.title}
 					curProfile={props.curProfile} videoId={video._id} user={props.user} />
-
-					<Comment curProfile={props.curProfile} videoId={video._id} userId={props.user}/>
-				</div>
+					{props.user === null ? 
+					null :
+					<Comment curProfile={props.curProfile} videoId={video._id} user={props.user}userId={props.user}/>
+					}
+		
+				</Container>
 				)
 	})}
 

@@ -26,45 +26,27 @@ const App = () => {
   const [msgAlerts, setMsgAlerts] = useState([])
   const [curProfile, setCurProfile] = useState([])
   const [allVideos, setAllVideos] = useState(null)
+  const [allUsers, setAllUsers] = useState(null)
 
 
-// build the forms
-// when creating a json payload, always initialize it to the current user
-// make sure nothing runs in app because the user isn't logged in technically...
-// Running it in profile...
 
-// THIS ASYNC STRATEGY WORKED...
-//   useEffect( async ()=>{
-//           const response = await fetch(`http://localhost:8000/users`)
-//           const data = await response.json()
-//           const { profile } = data
-
-//           // let foundUser = data.filter((user)=>{
-//           //   if ((user))
-//           // })
-//           setCurProfile(profile)
-//           console.table(data)
-//           console.table(profile)
-  
-//       },[])
-
-// WE STRINGIFY BODY OBJECTS WHEN SENDING POST REQUESTS
-// WHEN RETRIEVING RESPOSNES, WE PARSE IT INTO JSON...
 useEffect(() => {
   getAllVideos()
   getAllProfile()
+  getAllComments()
+  getAllUsers()
 }, [user])
 
 console.log('this is user', user)
 
 const getAllVideos = () => {
-      fetch(`http://localhost:8000/videos/`)
-      .then(response => {
-          return response.json()
-      })
-      .then(foundVideos => {
-          console.log("anything?", foundVideos.videos)
-          setAllVideos(foundVideos.videos)
+  fetch(`http://localhost:8000/videos/`)
+  .then(response => {
+      return response.json()
+  })
+  .then(foundVideos => {
+      console.log("anything?", foundVideos.videos)
+      setAllVideos(foundVideos.videos)
     // console.log("this is allVideos", allVideos)
   })
   .catch((error) => { 
@@ -90,6 +72,23 @@ const getAllProfile = () => {
   }
 }
 
+const getAllComments = () => {
+
+}
+
+const getAllUsers = () => {
+  fetch(`http://localhost:8000/`)
+  .then(response => {
+      return response.json()
+  })
+  .then(foundAllUsers => {
+      console.log("anything?", foundAllUsers.user)
+      // setAllVideos(foundVideos.videos)
+    // console.log("this is allVideos", allVideos)
+  })
+  .catch((error) => { 
+    console.log(error) })
+  }
 
   console.log('message alerts', msgAlerts)
   const clearUser = () => {

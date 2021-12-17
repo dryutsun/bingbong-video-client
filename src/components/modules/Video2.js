@@ -9,27 +9,32 @@ import { ListGroup, ListGroupItem } from 'react-bootstrap'
 import Comment from './Comment'
 
 export default function Video2 (props) {
+  const [updateComment, setUpdateComment] = useState(false)
 
+  const handleCommentUpdate = () => {
+    
+  }
+  
     // // regex filter to allow us to determine what to display depending on true or false result!
     // // so we need to write a condition that uses isValidUrl to return the video if it is valid, but return nothing if it is not valid...
-    const isValidUrl = (_string) => {
-        const matchpattern = /^https?:\/\/(?:www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)$/gm;
-        return matchpattern.test(_string);
-      }
-      let allcomments
-      if (props.comments != null) {
-      allcomments = props.comments.map((comment)=>{
-        //   console.log(comment)
-          return (
-              <ListGroupItem>
-                  <small>{comment.postedBy}</small>
-                  <p>{comment.commentText}</p>
-              </ListGroupItem>
-          )
-      })
-    } else {
-        <p>Please add a comment...</p>
+  const isValidUrl = (_string) => {
+      const matchpattern = /^https?:\/\/(?:www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)$/gm;
+      return matchpattern.test(_string);
     }
+    let allcomments
+    if (props.comments != null) {
+    allcomments = props.comments.map((comment)=>{
+        console.log("these are comment?", comment)
+        return (
+            <ListGroupItem>
+                <small>{comment.postedBy}</small>
+                <p>{comment.commentText}</p>
+            </ListGroupItem>
+        )
+    })
+  } else {
+      <p>Please add a comment...</p>
+  }
 
     //   console.log("is valid url", isValidUrl(props.url))
       // This works...don't touch :*(;
