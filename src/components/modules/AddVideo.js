@@ -33,6 +33,7 @@ const postVideo =(e)=>{
 })
     .then(response=>response.json())
     .then(postedVideo=>{
+      props.getAllVideos()
         setNewVideo({
             url: '',
             title: '',

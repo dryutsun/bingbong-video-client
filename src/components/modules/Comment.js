@@ -1,9 +1,13 @@
 import React, { useEffect, useState } from 'react'
+import Forms from 'react-bootstrap/Form'
 
 
 export default function Comment(props) {
+  console.log("this is comment props", props)
+  const userParsed = props.user.toString()
+  console.log("parsed user", userParsed)
   const [newComment, setNewComment] = useState({   
-          "postedBy":props.userId,
+          "postedBy": props.userId,
           // "username":props.userId.email,  
           "commentText": "",
           "thumbnail": ""
@@ -25,7 +29,6 @@ export default function Comment(props) {
       
       let preJSONBody = {
           postedBy: props.userId,
-          username: props.userId.email,  
           commentText: newComment.commentText,
           thumbnail: newComment.thumbnail,
       }
@@ -33,13 +36,14 @@ export default function Comment(props) {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "Authorization": `Bearer ${props.userId.token}`
+        "Authorization": `Bearer ${props.user.token}`
                 },
         body: JSON.stringify(preJSONBody)
       
     })
           .then(response => response.json())
           .then(postedComment => {
+            props.getAllComments()
             setNewComment({
                 postedBy: props.userId,
                 // username: props.userId.email,
@@ -57,6 +61,7 @@ export default function Comment(props) {
     return (
       <form onSubmit={postComment}>
           <div>
+
           <label htmlFor="comment">Type a comment:</label>
           <input
               type="text"
@@ -69,6 +74,11 @@ export default function Comment(props) {
           </div>
           <input type="submit" value="Submit"/>
       </form>
+  
+
+
+
+
     )    
 }
 
